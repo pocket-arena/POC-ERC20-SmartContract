@@ -666,7 +666,7 @@ contract MyToken is ERC20 {
     for (uint i=(schedule.length - 1); i>0; i--) {
       if (changeDate <= schedule[i-1].day) {
         recalculate_target = (schedule[i-1].day - changeDate) * _seconds_per_block;
-        schedule[i-1].day = recalculate_target / new_seconds_per_block;
+        schedule[i-1].day = changeDate + recalculate_target / new_seconds_per_block;
       } 
       else {
         break;
