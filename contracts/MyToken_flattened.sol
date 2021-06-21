@@ -362,6 +362,7 @@ import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 
 contract MyToken is ERC20 {
   uint256 constant INIT_SUPPLY_POC = 1000000000;
+  uint256 constant MAX_MINT_POC = 2000000000;
     
 // address constant _approver1 = 0x2C76A35B071b9299b538c93686903c8Ab9F06e5e;
 // address constant _approver2 = 0x65d6D8353566Be8866a03B41d21173C647DBa0dD;
@@ -580,6 +581,7 @@ contract MyToken is ERC20 {
   }
   function mint(uint256 addedToken) listingDT onlyOwner external returns (bool) {
     require((_listingDate + _mint_term) <= block.number, "creating new token is not yet");
+    require(MAX_MINT_POC >= (_addedSupplyToken + addedToken), "mint is reached on max");
     uint8 sum_approval = 0;
     if (_mintApproved1 > 0) {
       require(_mintApproved1 == addedToken, "you must get the right approval from approver1");
@@ -666,7 +668,7 @@ contract MyToken is ERC20 {
     for (uint i=(schedule.length - 1); i>0; i--) {
       if (changeDate <= schedule[i-1].day) {
         recalculate_target = (schedule[i-1].day - changeDate) * _seconds_per_block;
-        schedule[i-1].day = changeDate + recalculate_target / new_seconds_per_block;
+        schedule[i-1].day = changeDate + (recalculate_target / new_seconds_per_block);
       } 
       else {
         break;
